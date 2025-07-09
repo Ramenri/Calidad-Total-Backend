@@ -3,8 +3,8 @@ import os
 
 db: SQLAlchemy = SQLAlchemy()
 
-POSTGRES_USER = "postgres"
-POSTGRES_PASSWORD = "R0fae1"
+POSTGRES_USER = "zgel"
+POSTGRES_PASSWORD = "L+vr7lt_Oax8+Q6BE9VdmZf"
 POSTGRES_HOST = "localhost"
 POSTGRES_PORT = "5432"
 POSTGRES_DB = "CalidadTotal"
