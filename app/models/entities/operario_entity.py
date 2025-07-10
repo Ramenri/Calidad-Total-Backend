@@ -14,8 +14,8 @@ class OperarioEntity(db.Model):
     nombre: str = db.Column(db.String(100), nullable=False)
     apellido: str = db.Column(db.String(100), nullable=False)
     estado: bool = db.Column(db.Boolean, default=True)
-    numero_cedula: int = db.Column(db.Integer, nullable=False, unique=True)
-    numero_telefonico: int = db.Column(db.Integer, nullable=False)
+    numero_cedula: str = db.Column(db.String(30), nullable=False, unique=True)
+    numero_telefonico: str = db.Column(db.String(30), nullable=False)
     correo: str = db.Column(db.String(100), nullable=False)
 
     def get_json(self) -> dict:

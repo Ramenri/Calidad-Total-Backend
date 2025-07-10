@@ -31,8 +31,8 @@ class OperarioCrontroller:
         data: dict = request.get_json()
         nombre: str = data.get('nombre')
         apellido: str = data.get('apellido')
-        numero_cedula: int = data.get('numeroCedula')
-        numero_telefonico: int = data.get('numeroTelefonico')
+        numero_cedula: str = data.get('numeroCedula')
+        numero_telefonico: str = data.get('numeroTelefonico')
         correo: str = data.get('correo')
         empresa_id: str = data.get('empresa_id')
 

@@ -196,7 +196,7 @@ class OperarioServicios:
                 return {"status": "error", "message": f"Empresa con ID {empresa_id} no encontrada."}
             
             # Verificar si ya existe un operario con esa cédula
-            operario_existente = OperarioEntity.query.filter_by(numero_cedula=int(data["cedula"])).first()
+            operario_existente = OperarioEntity.query.filter_by(numero_cedula=str(data["cedula"])).first()
             
             if operario_existente:
                 # Verificar si el operario ya está asociado a esta empresa

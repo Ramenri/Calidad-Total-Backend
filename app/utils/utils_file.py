@@ -3,6 +3,7 @@ import uuid
 import PyPDF2
 import base64
 import io 
+from app.configuration.config import Config
 from werkzeug.utils import secure_filename
 
 class UtilsFile:
@@ -15,7 +16,7 @@ class UtilsFile:
 
     @staticmethod
     def unificarPDFS(urls: list[str]) -> str:
-        base_folder = os.path.join(os.getcwd(), "archivos")
+        base_folder = Config.DOCUMENTS_PATH
         pdf_merger = PyPDF2.PdfMerger()
 
         for url in urls:
@@ -74,7 +75,7 @@ class UtilsFile:
 
     @staticmethod
     def eliminarPorUrl(url: str):
-        base_folder = os.path.join(os.getcwd(), "archivos")
+        base_folder = Config.DOCUMENTS_PATH
         ruta_completa = os.path.abspath(os.path.join(base_folder, url))
         
         if not ruta_completa.startswith(base_folder):

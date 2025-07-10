@@ -7,6 +7,7 @@ from app.models.entities.contrato_entity import ContratoEntity
 from app.models.entities.centro_Trabajo_entity import CentroTrabajoEntity
 from app.utils.utils_file import UtilsFile
 from app.utils.utils_historial import registrar_historial
+from app.configuration.config import Config
 import datetime
 
 filtros = {
@@ -144,26 +145,47 @@ class DocumentoServicios:
 
         urls = []
 
+        if documentoHojaVida:
+            urls.append(documentoHojaVida.ruta_archivo)
+
+        if documentoCedula:
+            urls.append(documentoCedula.ruta_archivo)
+
         if documentoCarnetVacunas:
             urls.append(documentoCarnetVacunas.ruta_archivo)
-
-        if documentoCertificadoPensiones:
-            urls.append(documentoCertificadoPensiones.ruta_archivo)
-
-        if documentoLibretaMilitar:
-            urls.append(documentoLibretaMilitar.ruta_archivo)
-
-        if documentoCursosPregrado:
-            urls.append(documentoCursosPregrado.ruta_archivo)
-
-        if documentoCursosPosgrado:
-            urls.append(documentoCursosPosgrado.ruta_archivo)
 
         if documentoInduccion:
             urls.append(documentoInduccion.ruta_archivo)
 
+        if documentoConduccion:
+            urls.append(documentoConduccion.ruta_archivo)
+
+        if documentoAntecedentes:
+            urls.append(documentoAntecedentes.ruta_archivo)
+
+        if documentoBachillerato:
+            urls.append(documentoBachillerato.ruta_archivo)
+
+        if documentoCertificadoLaboral:
+            urls.append(documentoCertificadoLaboral.ruta_archivo)
+
+        if documentoCertificadoEPS:
+            urls.append(documentoCertificadoEPS.ruta_archivo)
+      
         if documentoOtrosCursos:
             urls.append(documentoOtrosCursos.ruta_archivo)
+
+        if documentoCursosPosgrado:
+            urls.append(documentoCursosPosgrado.ruta_archivo)
+
+        if documentoCursosPregrado:
+            urls.append(documentoCursosPregrado.ruta_archivo)
+
+        if documentoLibretaMilitar:
+            urls.append(documentoLibretaMilitar.ruta_archivo)
+
+        if documentoCertificadoPensiones:
+            urls.append(documentoCertificadoPensiones.ruta_archivo)
 
         if documentoContratos:
             urls.append(documentoContratos.ruta_archivo)
@@ -177,32 +199,11 @@ class DocumentoServicios:
         if documentoOtrosSi:
             urls.append(documentoOtrosSi.ruta_archivo)
 
-        if documentoLiquidacion:
-            urls.append(documentoLiquidacion.ruta_archivo)
-
         if documentoOtrosDocumentos:
             urls.append(documentoOtrosDocumentos.ruta_archivo)
 
-        if documentoHojaVida:
-            urls.append(documentoHojaVida.ruta_archivo)
-
-        if documentoCedula:
-            urls.append(documentoCedula.ruta_archivo)
-
-        if documentoCertificadoLaboral:
-            urls.append(documentoCertificadoLaboral.ruta_archivo)
-
-        if documentoBachillerato:
-            urls.append(documentoBachillerato.ruta_archivo)
-
-        if documentoCertificadoEPS:
-            urls.append(documentoCertificadoEPS.ruta_archivo)
-
-        if documentoConduccion:
-            urls.append(documentoConduccion.ruta_archivo)
-
-        if documentoAntecedentes:
-            urls.append(documentoAntecedentes.ruta_archivo)
+        if documentoLiquidacion:
+            urls.append(documentoLiquidacion.ruta_archivo)
 
         print(f"urls: {urls}")
 
@@ -233,7 +234,7 @@ class DocumentoServicios:
         url_relativa = UtilsFile.guardarArchivoEnElDirectorio(
             file=file,
             tipoArchivo=tipoArchivo,
-            uploadFolder="archivos",  
+            uploadFolder=Config.DOCUMENTS_PATH,  
             apellido=apellido,
             contrato_id=contrato_id,
             cedula=cedula

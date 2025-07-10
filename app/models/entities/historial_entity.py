@@ -6,7 +6,7 @@ class HistorialEntity(db.Model):
     __tablename__ = 'historial'
 
     id = db.Column(db.String(100), primary_key=True, default=lambda: str(uuid.uuid4()))
-    usuario_id = db.Column(db.Integer, nullable=False)
+    usuario_id = db.Column(db.String(36), nullable=False)
     accion = db.Column(db.String(50), nullable=False)
     peticion = db.Column(db.String(10), nullable=False)
     rol = db.Column(db.String(50), nullable=False)
