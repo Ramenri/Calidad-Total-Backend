@@ -7,11 +7,11 @@ from app.models.entities.operario_entity import OperarioEntity
 class UsuarioEntity(db.Model):
     __tablename__ = 'usuario'
 
-    id: Mapped[str] = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id: Mapped[int] = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     nombre_usuario: Mapped[str] = db.Column(db.String(100), nullable=False)
     contraseña: Mapped[str] = db.Column(db.String(100), nullable=False)
     rol: Mapped[str] = db.Column(db.String(100), nullable=False)
-    operario_id: Mapped[str] = db.Column(db.String(36), db.ForeignKey('operario.id'), nullable=False)
+    operario_id: Mapped[int] = db.Column(db.BigInteger, db.ForeignKey('operario.id'), nullable=False)
 
 
     def getUsername(self) -> str:

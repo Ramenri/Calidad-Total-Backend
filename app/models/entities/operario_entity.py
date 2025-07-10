@@ -2,15 +2,15 @@ import uuid
 from app.configuration.configuracion_Database import db
 
 association_table = db.Table('association', db.metadata,
-    db.Column('empresa_id', db.String, db.ForeignKey('empresa.id')),
-    db.Column('operario_id', db.String, db.ForeignKey('operario.id'))
+    db.Column('empresa_id', db.BigInteger, db.ForeignKey('empresa.id')),
+    db.Column('operario_id', db.BigInteger, db.ForeignKey('operario.id'))
 )
 
 class OperarioEntity(db.Model):
     
     __tablename__ = 'operario'
 
-    id: str = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     nombre: str = db.Column(db.String(100), nullable=False)
     apellido: str = db.Column(db.String(100), nullable=False)
     estado: bool = db.Column(db.Boolean, default=True)

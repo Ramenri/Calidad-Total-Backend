@@ -112,15 +112,20 @@ class EmpresaCrontroller:
     
     @empresa_routes.route('/buscarPorUuid', methods=['GET'])
     @staticmethod
-    def obtener_empresa_por_uuid() -> tuple:
-        uuid_empresa = request.args.get('uuid')
+    def obtener_empresa_por_id() -> tuple:
+        id_empresa = request.args.get('uuid')  
 
-        if not uuid_empresa:
-            return jsonify({'error': 'El UUID de la empresa es requerido'}), 400
+        if not id_empresa:
+            return jsonify({'error': 'El ID de la empresa es requerido'}), 400
 
-        empresa = EmpresaServicios.obtener_por_uuid(uuid_empresa)
+        try:
+            id_empresa = int(id_empresa)
+        except ValueError:
+            return jsonify({'error': 'El ID debe ser un número entero'}), 400
+
+        empresa = EmpresaServicios.obtener_por_id(id_empresa)
 
         if empresa is None:
-            return jsonify({'error': 'No se encontró una empresa con ese UUID'}), 404
+            return jsonify({'error': 'No se encontró una empresa con ese ID'}), 404
 
         return jsonify(empresa.get_json()), 200

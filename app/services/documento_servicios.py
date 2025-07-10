@@ -270,7 +270,7 @@ class DocumentoServicios:
         return {"message": "se ha eliminado correctamente"}
     
     @staticmethod
-    def obtener_documentos_por_contrato(id_contrato: str) -> list:
+    def obtener_documentos_por_contrato(id_contrato: int) -> list:
         documentos = DocumentoEntity.query.filter_by(id_contrato=id_contrato, estado=True).all()
         return [doc.get_json() for doc in documentos]
     
@@ -282,7 +282,7 @@ class DocumentoServicios:
             f"Cambió el estado del documento ID {id} a {'activo' if nuevo_estado else 'inactivo'}"
             if isinstance(resultado, dict) and "message" in resultado else f"Error al cambiar estado del documento ID {id}"
     )
-    def cambiar_estado_documento(id: str, nuevo_estado: bool) -> DocumentoEntity:
+    def cambiar_estado_documento(id: int, nuevo_estado: bool) -> DocumentoEntity:
 
         documento= DocumentoEntity.query.get(id)
 

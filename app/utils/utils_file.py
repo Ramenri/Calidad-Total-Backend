@@ -52,7 +52,7 @@ class UtilsFile:
         os.makedirs(uploadFolder, exist_ok=True)
 
     @staticmethod
-    def guardarArchivoEnElDirectorio(file, tipoArchivo: str, uploadFolder: str, cedula: str, apellido: str, contrato_id: str) -> str:
+    def guardarArchivoEnElDirectorio(file, tipoArchivo: str, uploadFolder: str, cedula: str, apellido: str, contrato_id: int) -> str:
         print(f"[DEBUG] Guardando archivo: tipo={tipoArchivo}, cedula={cedula}, apellido={apellido}, contrato_id={contrato_id}")
         carpetaOperario = os.path.join(uploadFolder, f"{apellido}_{cedula}")
         carpetaContrato = os.path.join(carpetaOperario, contrato_id)

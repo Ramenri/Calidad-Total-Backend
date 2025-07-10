@@ -102,8 +102,8 @@ class EmpresaServicios:
         return True
     
     @staticmethod
-    def obtener_por_uuid(uuid_empresa: str) -> EmpresaEntity | None:
-        return EmpresaEntity.query.filter_by(id=uuid_empresa).first()
+    def obtener_por_id(id_empresa: int) -> EmpresaEntity | None:
+        return EmpresaEntity.query.get(id_empresa)
 
 
     

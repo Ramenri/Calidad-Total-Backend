@@ -10,7 +10,7 @@ class CentroController:
     @centro_routes.route("/actualizar/<id>", methods=['PUT'])
     @UtilsJWT.token_required(roles=["administrador"])
     @staticmethod
-    def actualizar(id: str) -> tuple[Request, int]:
+    def actualizar(id: int) -> tuple[Request, int]:
         try:
             data = request.get_json()
             nombre: str = data.get('nombre')
@@ -24,7 +24,7 @@ class CentroController:
     @centro_routes.route("/eliminar/<id>", methods=['DELETE'])
     @UtilsJWT.token_required(roles=["administrador"])
     @staticmethod
-    def eliminar(id: str) -> tuple[Request, int]:
+    def eliminar(id: int) -> tuple[Request, int]:
         try:
             CentroServicios.eliminar(id)
             return jsonify({"message": "Centro eliminado correctamente"}), 200
@@ -53,7 +53,7 @@ class CentroController:
         return jsonify(centro_trabajo.get_json()), 201 
 
     @centro_routes.route('/obtener/<empresa_id>', methods=['GET'])
-    def obtener_centros_por_empresa(empresa_id: str):
+    def obtener_centros_por_empresa(empresa_id: int):
         centros = CentroServicios.filtrar_por_empresa(empresa_id)
 
         if not centros:

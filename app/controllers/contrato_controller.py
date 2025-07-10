@@ -21,8 +21,8 @@ class ContratoCrontroller:
         except (TypeError, ValueError):
             return jsonify({'error': 'Formato de fecha inválido. Use "YYYY-MM-DD"'}), 400
 
-        centro_id: str = data.get('centro_id')
-        operario_id: str = data.get('operario_id')
+        centro_id: int = data.get('centro_id')
+        operario_id: int = data.get('operario_id')
         cargo: str= data.get('cargo')
 
         if not fecha_inicio:

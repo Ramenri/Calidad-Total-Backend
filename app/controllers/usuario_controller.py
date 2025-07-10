@@ -99,7 +99,7 @@ class UsuarioController:
         nombre_usuario: str = data.get('nombre_usuario')
         contraseña: str = data.get('contraseña')
         rol: str = data.get('rol')
-        operario_id: str = data.get('operario_id')
+        operario_id: int = data.get('operario_id')
 
         if not nombre_usuario:
             return jsonify({'error': 'El nombre del usuario es requerido'}), 400

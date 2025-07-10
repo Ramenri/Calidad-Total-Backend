@@ -34,7 +34,7 @@ class OperarioCrontroller:
         numero_cedula: str = data.get('numeroCedula')
         numero_telefonico: str = data.get('numeroTelefonico')
         correo: str = data.get('correo')
-        empresa_id: str = data.get('empresa_id')
+        empresa_id: int = data.get('empresa_id')
 
         if not nombre:
             return jsonify({'error': 'El nombre del operario es requerido'}), 400
@@ -75,7 +75,7 @@ class OperarioCrontroller:
     @staticmethod
     def actualizar_estado() -> tuple:
         data: dict = request.get_json()
-        numero_cedula: int = data.get('numeroCedula')
+        numero_cedula: str = data.get('numeroCedula')
         nuevo_estado: bool = data.get('estado')
 
         if numero_cedula is None or nuevo_estado is None:
@@ -88,9 +88,9 @@ class OperarioCrontroller:
 
         return jsonify({'message': 'Estado del operario fue actualizado correctamente'}), 200
     
-    @operario_routes.route('/buscar/<string:operario_id>', methods=['GET'])
+    @operario_routes.route('/buscar/<integer:operario_id>', methods=['GET'])
     @staticmethod
-    def buscar_por_id(operario_id: str) -> tuple:
+    def buscar_por_id(operario_id: int) -> tuple:
         operario = OperarioServicios.buscar_por_id(operario_id)
         if not operario:
             return jsonify({'error': 'Operario no encontrado'}), 404
@@ -107,7 +107,7 @@ class OperarioCrontroller:
     
     @operario_routes.route('/operariosPorEmpresa/<empresa_id>', methods=['POST'])
     @staticmethod
-    def obtener_operarios_por_empresa(empresa_id: str):
+    def obtener_operarios_por_empresa(empresa_id: int):
         operarios = OperarioServicios.obtener_por_empresa(empresa_id)
         return jsonify(operarios), 200
     
@@ -127,7 +127,7 @@ class OperarioCrontroller:
     @operario_routes.route('/actualizar/<operario_id>', methods=['PUT'])
     @UtilsJWT.token_required(roles=["administrador"])
     @staticmethod
-    def actualizar_operario(operario_id: str) -> tuple:
+    def actualizar_operario(operario_id: int) -> tuple:
         data = request.get_json()
         print(f"Datos recibidos: {data}")
         

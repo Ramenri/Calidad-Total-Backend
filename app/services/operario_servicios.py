@@ -39,7 +39,7 @@ class OperarioServicios:
         return True
     
     @staticmethod
-    def buscar_por_id(id: str) -> OperarioEntity | None:
+    def buscar_por_id(id: int) -> OperarioEntity | None:
         return OperarioEntity.query.filter_by(id=id).first()
     
     @staticmethod
@@ -88,7 +88,7 @@ class OperarioServicios:
         return operarios_con_estado_contrato
     
     @staticmethod
-    def obtener_por_empresa(empresa_id: str) -> list[OperarioEntity]:
+    def obtener_por_empresa(empresa_id: int) -> list[OperarioEntity]:
         operarios = (
             db.session.query(OperarioEntity)
             .join(OperarioEntity.empresas)
@@ -132,7 +132,7 @@ class OperarioServicios:
             if "error" not in resultado else f"Error al actualizar operario: {resultado.get('error')}"
         )
     )
-    def actualizar_operario(operario_id: str, data: dict) -> dict:
+    def actualizar_operario(operario_id: int, data: dict) -> dict:
         operario = OperarioEntity.query.filter_by(id=operario_id).first()
         if not operario:
             return {"error": "Operario no encontrado"}

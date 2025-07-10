@@ -5,11 +5,11 @@ class CentroTrabajoEntity(db.Model):
 
     __tablename__ = "centro_trabajo"
 
-    id: str = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     codigo: int = db.Column(db.Integer, nullable=False, unique=True)
     nombre: str = db.Column(db.String(100), nullable=False)
     estado: bool = db.Column(db.Boolean, default=True)
-    empresa_id: str = db.Column(db.String(36), db.ForeignKey('empresa.id'), nullable=False)
+    empresa_id = db.Column(db.BigInteger, db.ForeignKey('empresa.id'), nullable=False)
 
     def get_json(self) -> dict:
         return{

@@ -23,7 +23,7 @@ class ContratoServicios:
        return contratoEntity
     
     @staticmethod
-    def obtener_contratos_por_empresa(empresa_id: str):
+    def obtener_contratos_por_empresa(empresa_id: int):
         contratos = (
             db.session.query(ContratoEntity).join(OperarioEntity, ContratoEntity.operario_id == OperarioEntity.id).filter(OperarioEntity.enoresa_id == empresa_id).all()
         )
@@ -40,7 +40,7 @@ class ContratoServicios:
             else f"Error al cambiar estado del contrato ID {id}"
         )
     )
-    def cambiar_estado_contrato(id: str, nuevo_estado: bool):
+    def cambiar_estado_contrato(id: int, nuevo_estado: bool):
         contrato = ContratoEntity.query.get(id)
 
         if not contrato:
@@ -57,7 +57,7 @@ class ContratoServicios:
         return [cargo[0] for cargo in cargos]
     
     @staticmethod
-    def obtener_contratos_por_operario_y_empresa(operario_id: str, empresa_id: str):
+    def obtener_contratos_por_operario_y_empresa(operario_id: int, empresa_id: int):
         contratos = (
             db.session.query(ContratoEntity)
             .join(CentroTrabajoEntity, ContratoEntity.centro_id == CentroTrabajoEntity.id)
@@ -78,7 +78,7 @@ class ContratoServicios:
             else f"Error al extender contrato ID {contrato_id}"
         )
     )
-    def extender_contrato(contrato_id: str, nueva_fecha_fin: str) -> dict:
+    def extender_contrato(contrato_id: int, nueva_fecha_fin: str) -> dict:
         contrato = ContratoEntity.query.filter_by(id=contrato_id).first()
 
         if not contrato:

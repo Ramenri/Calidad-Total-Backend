@@ -13,7 +13,7 @@ class CentroServicios:
             if resultado is None else f"Error al actualizar centro ID {id}"
         )
     )
-    def actualizar(id: str, nombre: str, codigo: int, estado: bool):
+    def actualizar(id: int, nombre: str, codigo: int, estado: bool):
         centroEncontrado = CentroTrabajoEntity.query.get(id)
         if centroEncontrado:
             centroEncontrado.nombre = nombre
@@ -51,7 +51,7 @@ class CentroServicios:
        return centroTrabajoEntity
     
     @staticmethod
-    def filtrar_por_empresa(empresa_id: str):
+    def filtrar_por_empresa(empresa_id: int):
         return CentroTrabajoEntity.query.filter_by(empresa_id=empresa_id).all()
 
     @staticmethod

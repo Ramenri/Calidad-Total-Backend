@@ -6,7 +6,7 @@ class EmpresaEntity(db.Model):
     
     __tablename__ = 'empresa'
 
-    id: str = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     codigo: int = db.Column(db.Integer, nullable=False, unique=True)
     nombre: str = db.Column(db.String(100), nullable=False)
     estado: bool = db.Column(db.Boolean, default=True)    

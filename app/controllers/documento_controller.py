@@ -40,7 +40,7 @@ class DocumentoController:
     def eliminarPorId(id):
         return jsonify(DocumentoServicios.eliminarPorId(id=id)), 200
     
-    @documento_routes.route("/buscarPorContrato/<string:id_contrato>", methods=["GET"])
+    @documento_routes.route("/buscarPorContrato/<integer:id_contrato>", methods=["GET"])
     def obtener_documentos_por_contrato(id_contrato):
         try:
             documentos = DocumentoServicios.obtener_documentos_por_contrato(id_contrato)

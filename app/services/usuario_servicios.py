@@ -58,7 +58,7 @@ class UsuarioServicios:
         peticion="DELETE", 
         descripcion_fn=lambda usuario_id, **kwargs: f"Se eliminó el usuario administrador con ID: {usuario_id}"
     )
-    def eliminar_admin_por_usuario_id(usuario_id: str):
+    def eliminar_admin_por_usuario_id(usuario_id: int):
         try:
             # Buscar el usuario por su ID
             usuario = UsuarioEntity.query.filter_by(id=usuario_id).first()
@@ -98,7 +98,7 @@ class UsuarioServicios:
         return usuario
 
     @staticmethod
-    def buscar_por_id(id: str) -> UsuarioEntity:
+    def buscar_por_id(id: int) -> UsuarioEntity:
         return UsuarioEntity.query.filter_by(id=id).first()
 
     @staticmethod
