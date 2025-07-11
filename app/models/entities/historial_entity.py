@@ -5,8 +5,8 @@ from app.configuration.configuracion_Database import db
 class HistorialEntity(db.Model):
     __tablename__ = 'historial'
 
-    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
-    usuario_id = db.Column(db.BigInteger, nullable=False)
+    id: int = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
+    usuario_id: int = db.Column(db.BigInteger, nullable=False)
     accion = db.Column(db.String(50), nullable=False)
     peticion = db.Column(db.String(10), nullable=False)
     rol = db.Column(db.String(50), nullable=False)

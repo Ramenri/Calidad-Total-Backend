@@ -16,8 +16,6 @@ responseErrorHandlersGlobal(app=app)
 
 if __name__ == "__main__":
 
-    print(f"Ruta donde se guardarán los documentos: {app.config['DOCUMENTOS_PATH']}")
-
     iniciar_routes(app)
 
     with app.app_context():

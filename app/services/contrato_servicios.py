@@ -40,16 +40,22 @@ class ContratoServicios:
             else f"Error al cambiar estado del contrato ID {id}"
         )
     )
-    def cambiar_estado_contrato(id: int, nuevo_estado: bool):
+    def actualizar_contrato(id: int, data: dict):
         contrato = ContratoEntity.query.get(id)
 
         if not contrato:
-            return {"error": "El contrato no existe"}, 404
-        
-        contrato.estado = nuevo_estado
+            return {"error": "Contrato no encontrado"}, 404
+
+        # Campos permitidos para actualizar
+        campos_actualizables = ['cargo', 'fecha_inicio', 'fecha_fin', 'estado']
+
+        for campo in campos_actualizables:
+            if campo in data:
+                setattr(contrato, campo, data[campo])
+
         db.session.commit()
 
-        return {"message": "Se ha actualizado el estado del contrato"}
+        return {"message": "Contrato actualizado correctamente"}
     
     @staticmethod
     def obtener_cargos():

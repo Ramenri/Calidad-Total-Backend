@@ -41,13 +41,11 @@ class ContratoCrontroller:
         contratos = ContratoServicios.obtener_contratos_por_empresa(empresa_id)
         return jsonify(contratos), 200
 
-    @contrato_routes.route('/actualizarEstado/<id>', methods=['PUT'])
+    @contrato_routes.route('/actualizar/<id>', methods=['PUT'])
     @UtilsJWT.token_required(roles=["administrador"])
-    def cambiar_estado_contrato(id):
+    def actualizar_contrato(id):
         data = request.get_json()
-        nuevo_estado = data.get('estado')
-
-        return jsonify(ContratoServicios.cambiar_estado_contrato(id, nuevo_estado))
+        return jsonify(ContratoServicios.actualizar_contrato(id, data))
     
     @contrato_routes.route('/cargos', methods=['GET'])
     def obtener_cargos():

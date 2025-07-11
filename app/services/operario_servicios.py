@@ -1,4 +1,4 @@
-from app.models.entities.operario_entity import OperarioEntity
+from app.models.entities.operario_entity import OperarioEntity, OperarioEmpresaAsociacion
 from app.models.entities.contrato_entity import ContratoEntity
 from app.models.entities.centro_Trabajo_entity import CentroTrabajoEntity
 from app.models.entities.empresa_entity import EmpresaEntity
@@ -162,11 +162,26 @@ class OperarioServicios:
         if data.get("correo") is not None:
             operario.correo = data.get("correo")
         if data.get("estado") is not None:
+            empresa_id = data.get("empresa_id")
+            if not empresa_id:
+                return {"error": "Se requiere empresa_id para actualizar el estado de asociación."}
+            try:
+                empresa_id = int(empresa_id)
+            except ValueError:
+                return {"error": "El ID de la empresa debe ser un número entero válido."}
+            nueva_asociacion = next(
+                (asociacion for asociacion in operario.empresa_asociaciones if asociacion.empresa_id == empresa_id),
+                None
+            )
+            if not nueva_asociacion:
+                return {"error": f"No hay asociación entre el operario y la empresa {empresa_id}"}
+
             estado_valor = data.get("estado")
             if isinstance(estado_valor, str):
-                operario.estado = estado_valor.lower() == 'true'
+                nueva_asociacion.estado = estado_valor.lower() == 'true'
             else:
-                operario.estado = bool(estado_valor)
+                nueva_asociacion.estado = bool(estado_valor)
+
         
         try:
             db.session.commit()
@@ -199,16 +214,18 @@ class OperarioServicios:
             operario_existente = OperarioEntity.query.filter_by(numero_cedula=str(data["cedula"])).first()
             
             if operario_existente:
-                # Verificar si el operario ya está asociado a esta empresa
-                if empresa not in operario_existente.empresas:
-                    # Si no está asociado, hacer la asociación
-                    operario_existente.empresas.append(empresa)
-                    operario_a_usar = operario_existente
-                    mensaje_operario = "Operario existente asociado a nueva empresa"
-                else:
-                    # Si ya está asociado, usar el operario existente
-                    operario_a_usar = operario_existente
-                    mensaje_operario = "Operario existente ya asociado a la empresa"
+                ya_asociado = any(
+                    a.empresa_id == empresa.id for a in operario_existente.empresa_asociaciones
+                )
+                if not ya_asociado:
+                    nueva_asociacion = OperarioEmpresaAsociacion(
+                        operario=operario_existente,
+                        empresa=empresa,
+                        estado=True
+                    )
+                    db.session.add(nueva_asociacion)
+                mensaje_operario = "Operario existente asociado a empresa"
+                operario_a_usar = operario_existente 
             else:
                 # 1. Crear el Operario nuevo
                 operario_a_usar = OperarioEntity(
@@ -217,12 +234,15 @@ class OperarioServicios:
                     numero_cedula=int(data["cedula"]),
                     numero_telefonico=int(data["telefono"]),
                     correo=data["correo"],
-                    estado=True
                 )
                 
                 # 2. Asociar el Operario a la Empresa
-                operario_a_usar.empresas.append(empresa)
-                db.session.add(operario_a_usar)
+                nueva_asociacion = OperarioEmpresaAsociacion(
+                    operario=operario_a_usar,
+                    empresa=empresa,
+                    estado=True
+                )
+                db.session.add(nueva_asociacion)
                 mensaje_operario = "Operario nuevo creado y asociado a empresa"
             
             # Hacer flush para obtener el ID del operario antes de crear el contrato
@@ -324,11 +344,16 @@ class OperarioServicios:
                         "operarios": []
                     }
             
-            if filtros.get('estado_operario'):
+            if filtros.get('estado_operario') and filtros.get('empresa_id'):
                 estado_str = filtros['estado_operario'].lower().strip()
                 if estado_str in ['activo', 'inactivo']:
                     estado_bool = estado_str == 'activo'
-                    query = query.filter(OperarioEntity.estado == estado_bool)
+                    # Join explícito a la asociación
+                    query = query.join(OperarioEntity.empresa_asociaciones)\
+                                .filter(
+                                    OperarioEmpresaAsociacion.empresa_id == filtros['empresa_id'],
+                                    OperarioEmpresaAsociacion.estado == estado_bool
+                                )
             
             if necesita_contrato:
                 if filtros.get('cargo'):
@@ -404,15 +429,15 @@ class OperarioServicios:
                             "fecha_fin_contrato": None
                         })
                 
-                empresas_info = []
-                for empresa in operario.empresas:
-                    empresas_info.append({
-                        "id": empresa.id,
-                        "nombre": empresa.nombre,
-                        "codigo": empresa.codigo,
-                        "estado": empresa.estado
-                    })
-                operario_dict["empresas"] = empresas_info
+                #empresas_info = []
+                #for empresa in operario.empresas:
+                    #empresas_info.append({
+                       # "id": empresa.id,
+                        #"nombre": empresa.nombre,
+                        #"codigo": empresa.codigo,
+                        #"estado": empresa.estado
+                    #})
+                #operario_dict["empresas"] = empresas_info
                 
                 operarios_procesados.append(operario_dict)
             

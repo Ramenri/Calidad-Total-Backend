@@ -52,9 +52,9 @@ class CentroController:
         CentroServicios.crear(centro_trabajo)
         return jsonify(centro_trabajo.get_json()), 201 
 
-    @centro_routes.route('/obtener/<empresa_id>', methods=['GET'])
-    def obtener_centros_por_empresa(empresa_id: int):
-        centros = CentroServicios.filtrar_por_empresa(empresa_id)
+    @centro_routes.route('/obtener/<idEmpresa>', methods=['GET'])
+    def obtener_centros_por_empresa(idEmpresa: int):
+        centros = CentroServicios.filtrar_por_empresa(idEmpresa)
 
         if not centros:
             return{'message': 'No se encontraron centros de trabajo para esta empresa'}, 404

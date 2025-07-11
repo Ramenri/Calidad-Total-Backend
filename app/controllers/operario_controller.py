@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, Request, request
 from app.services.operario_servicios import OperarioServicios
 from app.models.entities.operario_entity import OperarioEntity
 from app.models.entities.empresa_entity import EmpresaEntity
+from app.models.entities.operario_entity import OperarioEmpresaAsociacion 
+from app.configuration.configuracion_Database import db
 from app.utils.utils_jwt import UtilsJWT
 
 operario_routes: Blueprint = Blueprint('operario',__name__, url_prefix='/operario')
@@ -63,7 +65,12 @@ class OperarioCrontroller:
             numero_telefonico=numero_telefonico, 
             correo=correo
         )
-        operario.empresas.append(empresa)
+        nueva_asociacion = OperarioEmpresaAsociacion(
+            operario=operario,
+            empresa=empresa,
+            estado=True
+        )
+        db.session.add(nueva_asociacion)
         OperarioServicios.crear(operario)
         
         operario_json = operario.get_json()  
@@ -88,7 +95,7 @@ class OperarioCrontroller:
 
         return jsonify({'message': 'Estado del operario fue actualizado correctamente'}), 200
     
-    @operario_routes.route('/buscar/<integer:operario_id>', methods=['GET'])
+    @operario_routes.route('/buscar/<operario_id>', methods=['GET'])
     @staticmethod
     def buscar_por_id(operario_id: int) -> tuple:
         operario = OperarioServicios.buscar_por_id(operario_id)
@@ -101,7 +108,6 @@ class OperarioCrontroller:
     @staticmethod
     def filtrar_operario():
         filtros = request.get_json()
-        print(f"Filtros recibidos: {filtros}")
         operarios = OperarioServicios.filtrar_operario(filtros)
         return jsonify(operarios), 200
     
@@ -136,7 +142,7 @@ class OperarioCrontroller:
         return jsonify(resultado), 200
 
     @operario_routes.route('/filtrarOperariosCompleto', methods=['POST'])
-    @UtilsJWT.token_required(roles=["administrador"])
+    @UtilsJWT.token_required(roles=["administrador", "usuario"])
     @staticmethod
     def filtrar_operarios_completo():
         try:

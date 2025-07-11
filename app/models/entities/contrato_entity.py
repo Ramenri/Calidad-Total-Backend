@@ -7,12 +7,12 @@ class ContratoEntity(db.Model):
     
     __tablename__ = 'contrato'
 
-    id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
+    id: int = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     fecha_inicio: datetime.date = db.Column(db.Date, nullable=False)
     fecha_fin: datetime.date = db.Column(db.Date, nullable=False)
     estado: bool = db.Column(db.Boolean, default=True)
-    centro_id = db.Column(db.BigInteger, db.ForeignKey('centro_trabajo.id'), nullable=False)
-    operario_id = db.Column(db.BigInteger, db.ForeignKey('operario.id'), nullable=False)
+    centro_id: int = db.Column(db.BigInteger, db.ForeignKey('centro_trabajo.id'), nullable=False)
+    operario_id: int = db.Column(db.BigInteger, db.ForeignKey('operario.id'), nullable=False)
     cargo: str = db.Column(db.String(36), nullable=False)
 
     def get_json(self) -> dict:

@@ -1,6 +1,6 @@
 from app.models.entities.empresa_entity import EmpresaEntity
 from app.models.entities.operario_entity import OperarioEntity
-from app.models.entities.operario_entity import association_table
+from app.models.entities.operario_entity import OperarioEmpresaAsociacion
 from app.configuration.configuracion_Database import db
 from app.utils.utils_historial import registrar_historial
 from sqlalchemy import and_
@@ -8,7 +8,7 @@ from sqlalchemy import and_
 class EmpresaServicios:
 
     @staticmethod
-    def obtener_empresas_del_operario_no_afiliadas(cedulaOperario: int) -> list[EmpresaEntity]:        
+    def obtener_empresas_del_operario_no_afiliadas(cedulaOperario: str) -> list[EmpresaEntity]:        
         operario = OperarioEntity.query.filter_by(numero_cedula=cedulaOperario).first()
         
         if not operario:
@@ -16,12 +16,14 @@ class EmpresaServicios:
             return todasEmpresas
         
         empresas_no_afiliadas = db.session.query(EmpresaEntity)\
-            .outerjoin(association_table, 
-                      and_(EmpresaEntity.id == association_table.c.empresa_id,
-                           association_table.c.operario_id == operario.id))\
-            .filter(association_table.c.operario_id.is_(None))\
-            .filter(EmpresaEntity.estado == True)\
-            .all()
+            .outerjoin(
+                OperarioEmpresaAsociacion, 
+                and_(
+                    EmpresaEntity.id == OperarioEmpresaAsociacion.empresa_id,
+                    OperarioEmpresaAsociacion.operario_id == operario.id
+                )
+            )\
+            .filter(OperarioEmpresaAsociacion.operario_id.is_(None))
         
         return empresas_no_afiliadas
 
